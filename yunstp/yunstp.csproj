@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App">
+      <PrivateAssets Condition="'%(PackageReference.Version)' == ''">all</PrivateAssets>
+      <Publish Condition="'%(PackageReference.Version)' == ''">true</Publish>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="Resources\SharedResources.resx" />
+    <EmbeddedResource Remove="Resources\SharedResource.zh-CN.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Resources\SharedResource.zh-CN" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\SharedResource.cn.resx">
+      <LogicalName>yunstp.Resources.SharedResource.zh-CN.resources</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\SharedResource.zh-cn.resx">
+      <LogicalName>yunstp.Resources.SharedResource.zh-CN.resources</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\SharedResource %28副本%29.zh.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\yunstp.common\yunstp.common.csproj" />
+    <ProjectReference Include="..\yunstp.data\yunstp.data.csproj" />
+    <ProjectReference Include="..\yunstp.dapper\yunstp.dapper.csproj" />
+  </ItemGroup>
+</Project>
