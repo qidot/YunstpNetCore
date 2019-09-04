@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
+using NLog;
+using yunstp.common.Helper;
 using yunstp.data;
 
 namespace yunstp.Controllers
@@ -27,14 +30,31 @@ namespace yunstp.Controllers
     {
         //公用的本地化
         private readonly IStringLocalizer _localizer;
+        //日志
+        private readonly ILogger<ValuesController> _logger;
 
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="localizer"></param>
-        public ValuesController(IStringLocalizer localizer
+        public ValuesController(IStringLocalizer localizer, ILogger<ValuesController> logger
             ) {
             _localizer = localizer;
+            _logger = logger;
+        }
+
+        /// <summary>
+        /// 日志测试
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        [HttpPost("log")]
+        public IActionResult log([FromBody]string message) {
+            //var str = message ?? "你好啊,这是一个默认的日志消息";
+            _logger.LogDebug($"DI的日志输出======>{message}");
+            this.GetLogger().Debug($"NLog自定义输出====>{message}");
+
+            return Ok("OK");
         }
 
         /// <summary>

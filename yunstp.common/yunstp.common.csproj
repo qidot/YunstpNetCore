@@ -4,4 +4,24 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Helper\" />
+    <Folder Include="Result\" />
+    <Folder Include="Enum\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NLog" Version="4.6.7" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.8.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="nlog.Kaifa.config" />
+    <None Remove="Enum\nlog.Kaifa.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="nlog.Kaifa.config">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

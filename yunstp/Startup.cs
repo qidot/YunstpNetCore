@@ -15,6 +15,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NLog.Extensions.Logging;
+using NLog.Web;
 
 namespace yunstp
 {
@@ -51,7 +53,8 @@ namespace yunstp
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)      //设定编译版本:2.2
                 .ConfigureApiBehaviorOptions(
                     //配置DataAnnotations的校验行为
-                    options => {
+                    options =>
+                    {
                         options.InvalidModelStateResponseFactory = context =>
                         {
                             //全球化-本地化的驱动器(否则无法自动渲染本地化配置)
@@ -59,15 +62,15 @@ namespace yunstp
                             //设定参数校验行为的返回信息
                             var problemDetails = new ValidationProblemDetails(context.ModelState);
                             //从本地化中实例错误信息处理
-                            string errstr = "" + problemDetails.Errors.SelectMany(err => err.Value ).Aggregate("", (current, e) => current + "," + _localizer[e]);
+                            string errstr = "" + problemDetails.Errors.SelectMany(err => err.Value).Aggregate("", (current, e) => current + "," + _localizer[e]);
                             //去除掉最后一位的逗号
                             errstr = errstr.Trim().Trim(',');
                             //返回通用的信息类
-                            return new JsonResult(new { message=errstr});
+                            return new JsonResult(new { message = errstr });
                         };
                     }
                 );
-                
+
             //全球化-本地化:::注册本地化服务，用于全局调用（单一实例）
             services.AddSingleton<IStringLocalizer>((sp) =>
             {
@@ -91,7 +94,7 @@ namespace yunstp
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -103,12 +106,19 @@ namespace yunstp
                 app.UseHsts();
             }
 
+            //使用NLog作为日志记录工具
+            loggerFactory.AddNLog();
+            //引入Nlog配置文件(根据当前运行环境加载)
+            env.ConfigureNLog($"nlog.{env.EnvironmentName}.config");
+
+
+
             #region 全球化-本地化
             var supportedCultures = new[] {
                 new CultureInfo("en-US"),
                 new CultureInfo("zh-Hans"),
                 new CultureInfo("fr")
-            };  
+            };
 
             app.UseRequestLocalization(new RequestLocalizationOptions
             {

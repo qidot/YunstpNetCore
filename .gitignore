@@ -53,6 +53,7 @@ internal-nlog.txt
 appsettings.Development.json
 appsettings.Production.json
 appsettings.Test.json
+nlog.Development.config
 nlog.Test.config
 nlog.Production.config
 
