@@ -53,8 +53,5 @@
     <Content Update="nlog %28副本%29.kaifa.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Update="nlog.Development.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 </Project>
