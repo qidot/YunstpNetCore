@@ -17,6 +17,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NLog.Extensions.Logging;
 using NLog.Web;
+using yunstp.common;
+using yunstp.common.Cors;
 
 namespace yunstp
 {
@@ -32,6 +34,22 @@ namespace yunstp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+
+            #region Enable CORS1
+            services.AddCors(
+                options =>
+                {
+                    options.AddPolicy("any", builder =>
+                    {
+                        builder.AllowAnyOrigin() //允许任何来源的主机访问//builder.WithOrigins("http://localhost:8080") ////允许http://localhost:8080的主机访问
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials();//指定处理cookie
+                    });
+                });
+            #endregion
+
             //全球化-本地化
             //指定本地化的resx配置的存放目录
             //文件名格式:filename.xx-XX.resx
@@ -58,7 +76,7 @@ namespace yunstp
                         options.InvalidModelStateResponseFactory = context =>
                         {
                             //全球化-本地化的驱动器(否则无法自动渲染本地化配置)
-                            var _localizer = context.HttpContext.RequestServices.GetRequiredService<IStringLocalizer<SharedResource>>();
+                            var _localizer = context.HttpContext.RequestServices.GetRequiredService<IStringLocalizer<DataValidResource>>();
                             //设定参数校验行为的返回信息
                             var problemDetails = new ValidationProblemDetails(context.ModelState);
                             //从本地化中实例错误信息处理
@@ -106,12 +124,12 @@ namespace yunstp
                 app.UseHsts();
             }
 
+            #region Nlog
             //使用NLog作为日志记录工具
             loggerFactory.AddNLog();
             //引入Nlog配置文件(根据当前运行环境加载)
             env.ConfigureNLog($"nlog.{env.EnvironmentName}.config");
-
-
+            #endregion
 
             #region 全球化-本地化
             var supportedCultures = new[] {
@@ -129,6 +147,11 @@ namespace yunstp
                 SupportedUICultures = supportedCultures
 
             });
+            #endregion
+
+            #region cors && options
+            app.UseCors("any");  //跨域配置
+            app.UseOptions();    //用于对VUE,REACT的前后开发模式,会OPTIONS方式先预请求
             #endregion
 
             app.UseStaticFiles();

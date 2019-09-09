@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using yunstp.common;
 
 namespace yunstp.data
 {
@@ -31,7 +32,7 @@ namespace yunstp.data
 
 
         [Required(ErrorMessage ="不能为空")]
-        [StringLength(50, MinimumLength = 0, ErrorMessage = "name not empty")]
+        [StringLength(5, MinimumLength = 0, ErrorMessage = "hello")]
         public string Name { set; get; } //varchar(50)  名称 
     }
 }

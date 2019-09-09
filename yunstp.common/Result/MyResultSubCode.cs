@@ -1,5 +1,5 @@
 ﻿using System;
-using yunstp.common.Enum;
+using yunstp.common.Enums;
 
 namespace yunstp.common.Result
 {

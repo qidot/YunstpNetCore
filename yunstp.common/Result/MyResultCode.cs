@@ -1,5 +1,5 @@
 ﻿using System;
-using yunstp.common.Enum;
+using yunstp.common.Enums;
 
 namespace yunstp.common.Result
 {
@@ -390,7 +390,8 @@ namespace yunstp.common.Result
         /// </summary>
         [EnumDescription("开始时间必须小于结束时间")]
         ERROR_50008 = 50008,
-        
 
+        [EnumDescription("全局异常")]
+        GLOBAL_EXCEPTION = 901,
     }
 }
